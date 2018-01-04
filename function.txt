@@ -1,0 +1,46 @@
+# -*- coding: utf-8 -*-
+
+import requests, json
+
+ # 登录函数
+
+def login(username,password):
+
+    url = 'http://test.cutt.com/login/check'
+    headers = {"app": "324160", "device": "0d70f329276b32565ff6c61d127a637f8187b8a0", "ver": "171221","Content-Type": "application/x-www-form-urlencoded","token":"r4HCCWMHRF6H8avxPGMxj07IXN5c1tM2vWHSMPn0KagXyoAnsCsYDo"}
+    Data = {"username":username,"password": password}
+    response = requests.post(url, headers=headers, data=Data)
+    content = json.loads(response.text)
+    token = content['token']
+    auth = content['auth']
+
+    if auth == 0:
+        return (token)
+    else:
+        return -1
+
+'''
+        
+    auth: 非0
+        97 - 过期
+        98 - 被禁用
+        99 - 用户不存在a
+        100 - 密码不正确
+        
+    auth = 0  
+        认证通过
+        
+'''
+
+
+ # 评论函数
+
+def comment(token,text):
+
+    comment_url = "https://test.cutt.com/api/article/comment"
+    comment_post = {"app": "324160","Ver": "171221","device": "0d70f329276b32565ff6c61d127a637f8187b8a0","Content-Type": "application/x-www-form-urlencoded","token":token}
+    comment_data = {"articleId": "961445189169","commentId":"801445267262","itemId":"31445189170", "share":"0", "text": text, "type": "1"}
+    comment_response = requests.post(url=comment_url, headers=comment_post,data =comment_data,verify=False)
+    comment_content = json.loads(comment_response.text)
+    message = comment_content['message']
+    return (message)
